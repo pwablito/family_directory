@@ -5,9 +5,9 @@ import (
 )
 
 type Person struct {
-	Id       int
-	Name     string
-	Birthday time.Time
-	Email    string
-	Phone    string
+	Id        int
+	Name      string
+	Birthdate time.Time
+	Email     string
+	Phone     string
 }

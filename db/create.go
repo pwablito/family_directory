@@ -1,0 +1,66 @@
+package db
+
+func (db *Database) Create() {
+	db.CreatePersonTable()
+	db.CreateChildTable()
+	db.CreateMarriageTable()
+}
+
+func (db *Database) CreatePersonTable() error {
+	db.connect()
+	createSQL := `
+		CREATE TABLE person (
+			id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			name TEXT,
+			birthdate TEXT,
+			email TEXT,
+			phone TEXT
+		);
+	`
+	statement, err := db.db.Prepare(createSQL)
+	defer db.disconnect()
+	if err != nil {
+		return err
+	}
+	statement.Exec()
+	return nil
+}
+
+func (db *Database) CreateChildTable() error {
+	db.connect()
+	createSQL := `
+		CREATE TABLE child (
+			id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			FOREIGN KEY(childid) REFERENCES person(id),
+			FOREIGN KEY(parent1id) REFERENCES person(id),
+			FOREIGN KEY(parent2id) REFERENCES person(id)
+		);
+	`
+	statement, err := db.db.Prepare(createSQL)
+	defer db.disconnect()
+	if err != nil {
+		return err
+	}
+	statement.Exec()
+	return nil
+}
+
+func (db *Database) CreateMarriageTable() error {
+	db.connect()
+	createSQL := `
+		CREATE TABLE marriage (
+			id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			FOREIGN KEY(person1id) REFERENCES person(id),
+			FOREIGN KEY(parent2id) REFERENCES person(id),
+			start TEXT,
+			finish TEXT
+		);
+	`
+	statement, err := db.db.Prepare(createSQL)
+	defer db.disconnect()
+	if err != nil {
+		return err
+	}
+	statement.Exec()
+	return nil
+}
