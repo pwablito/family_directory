@@ -11,6 +11,8 @@ func main() {
 	// Auth handlers
 	http.HandleFunc("/login", handler.Login)
 	http.HandleFunc("/register", handler.Register)
+	// Singleton directory handler
+	http.HandleFunc("/get_directory", handler.GetDirectory)
 	// Person handlers
 	http.HandleFunc("/get_person", handler.GetPerson)
 	http.HandleFunc("/add_person", handler.AddPerson)

@@ -10,9 +10,7 @@ type PersonService struct {
 }
 
 func CreatePersonService() *PersonService {
-	return &PersonService{
-		db: db.GetDatabase(),
-	}
+	return &PersonService{}
 }
 
 func (svc *PersonService) GetPersonById(id int) (*model.Person, error) {
