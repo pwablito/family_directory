@@ -6,15 +6,21 @@ import (
 )
 
 type PersonService struct {
-	db *db.DB
+	db db.Database
 }
 
 func CreatePersonService() *PersonService {
-	return &PersonService{db.CreateDB()}
+	return &PersonService{
+		db: db.GetDatabase(),
+	}
 }
 
-func (svc *PersonService) GetPerson(id string) *db.Person {
-
+func (svc *PersonService) GetPersonById(id int) (*model.Person, error) {
+	person, err := svc.db.GetPersonById(id)
+	if err != nil {
+		return nil, err
+	}
+	return person, nil
 }
 
 func (svc *PersonService) AddPerson(person model.Person) error {
