@@ -6,4 +6,6 @@ type AuthService struct {
 	db db.Database
 }
 
-func (svc *AuthService) RegisterUser(username string, password string, email string)
+func (svc *AuthService) RegisterUser(username string, password string, email string) {
+
+}

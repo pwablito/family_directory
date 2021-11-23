@@ -3,18 +3,18 @@ package db
 func (db *Database) Create() {
 	db.CreatePersonTable()
 	db.CreateChildTable()
-	db.CreateMarriageTable()
+	db.CreatePartnershipTable()
 }
 
 func (db *Database) CreatePersonTable() error {
 	db.connect()
 	createSQL := `
 		CREATE TABLE person (
-			id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-			name TEXT,
-			birthdate TEXT,
-			email TEXT,
-			phone TEXT
+			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			"name" TEXT,
+			"birthdate" TEXT,
+			"email" TEXT,
+			"phone" TEXT
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
@@ -30,10 +30,10 @@ func (db *Database) CreateChildTable() error {
 	db.connect()
 	createSQL := `
 		CREATE TABLE child (
-			id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-			FOREIGN KEY(childid) REFERENCES person(id),
-			FOREIGN KEY(parent1id) REFERENCES person(id),
-			FOREIGN KEY(parent2id) REFERENCES person(id)
+			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			FOREIGN KEY("childid") REFERENCES person(id),
+			FOREIGN KEY("parent1id") REFERENCES person(id),
+			FOREIGN KEY("parent2id") REFERENCES person(id)
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
@@ -45,15 +45,15 @@ func (db *Database) CreateChildTable() error {
 	return nil
 }
 
-func (db *Database) CreateMarriageTable() error {
+func (db *Database) CreatePartnershipTable() error {
 	db.connect()
 	createSQL := `
-		CREATE TABLE marriage (
-			id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-			FOREIGN KEY(person1id) REFERENCES person(id),
-			FOREIGN KEY(parent2id) REFERENCES person(id),
-			start TEXT,
-			finish TEXT
+		CREATE TABLE partnership (
+			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			FOREIGN KEY("person1id") REFERENCES person(id),
+			FOREIGN KEY("parent2id") REFERENCES person(id),
+			"start" TEXT,
+			"finish" TEXT
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)

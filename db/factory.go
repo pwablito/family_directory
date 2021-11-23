@@ -1,13 +1,13 @@
 package db
 
-func GetDatabase() Database {
+func GetDiskDatabase(filename string) Database {
 	return Database{
 		dbType:   "sqlite3",
-		filename: "db.sqlite",
+		filename: filename,
 	}
 }
 
-func GetTestDatabase() Database {
+func GetMemoryDatabase() Database {
 	return Database{
 		dbType:   "sqlite3",
 		filename: ":memory:",
