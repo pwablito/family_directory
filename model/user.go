@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -12,6 +13,10 @@ type User struct {
 	PasswordSalt string
 }
 
-func (user *User) serialize() string {
+func (user *User) Serialize() string {
 	return fmt.Sprintf("{\"username\":\"%s\",\"email\":\"%s\",\"name\":\"%s\"}", user.Username, user.Email, user.Name)
+}
+
+func DeserializeUser(json string) (*User, error) {
+	return nil, errors.New("not implemented")
 }

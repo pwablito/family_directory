@@ -7,7 +7,7 @@ func (db *Database) Create() {
 }
 
 func (db *Database) CreatePersonTable() error {
-	db.connect()
+	db.Connect()
 	createSQL := `
 		CREATE TABLE person (
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -18,7 +18,7 @@ func (db *Database) CreatePersonTable() error {
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
-	defer db.disconnect()
+	defer db.Disconnect()
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func (db *Database) CreatePersonTable() error {
 }
 
 func (db *Database) CreateChildTable() error {
-	db.connect()
+	db.Connect()
 	createSQL := `
 		CREATE TABLE child (
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +37,7 @@ func (db *Database) CreateChildTable() error {
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
-	defer db.disconnect()
+	defer db.Disconnect()
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (db *Database) CreateChildTable() error {
 }
 
 func (db *Database) CreatePartnershipTable() error {
-	db.connect()
+	db.Connect()
 	createSQL := `
 		CREATE TABLE partnership (
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -57,7 +57,7 @@ func (db *Database) CreatePartnershipTable() error {
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
-	defer db.disconnect()
+	defer db.Disconnect()
 	if err != nil {
 		return err
 	}
