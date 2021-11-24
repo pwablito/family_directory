@@ -2,6 +2,7 @@ package service
 
 import "testing"
 
-func TestService(t *testing.T) {
-
+func TestCreateServices(t *testing.T) {
+	CreatePersonService()
+	CreateUserService()
 }
