@@ -2,6 +2,9 @@ package db
 
 import (
 	"database/sql"
+
+	// Add database drivers here
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func (db *Database) Connect() error {
