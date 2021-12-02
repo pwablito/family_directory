@@ -14,8 +14,7 @@ type Partnership struct {
 }
 
 type Child struct {
-	Id        int
-	ChildId   int
-	Parent1Id int
-	Parent2Id int
+	Id       int
+	ChildId  int
+	ParentId int
 }

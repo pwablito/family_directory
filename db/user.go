@@ -7,17 +7,9 @@ import (
 func (db *Database) GetUserByUsername(username string) (*model.User, error) {
 	db.Connect()
 	defer db.Disconnect()
-	queryString := "SELECT * FROM users WHERE username = ? LIMIT 1"
-	statement, err := db.db.Prepare(queryString)
+	queryString := "SELECT username, name, email, password_hash, password_salt FROM user WHERE username = $1 LIMIT 1"
 
-	if err != nil {
-		return nil, err
-	}
-	row, err := statement.Query()
-
-	if err != nil {
-		return nil, err
-	}
+	row := db.db.QueryRow(queryString, username)
 
 	var result_username string
 	var result_name string
@@ -25,7 +17,11 @@ func (db *Database) GetUserByUsername(username string) (*model.User, error) {
 	var result_password_hash string
 	var result_password_salt string
 
-	row.Scan(&result_username, &result_name, &result_email, &result_password_hash, &result_password_salt)
+	err := row.Scan(&result_username, &result_name, &result_email, &result_password_hash, &result_password_salt)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return &model.User{
 		Username:     result_username,
