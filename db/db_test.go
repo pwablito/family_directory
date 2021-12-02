@@ -13,6 +13,7 @@ func TestCreateMemoryDatabase(t *testing.T) {
 		t.Errorf("Error creating database: %s", err)
 	}
 	// TODO make some assertions about the database
+	database.DestroyIfExists()
 }
 
 func TestCreateDiskDatabase(t *testing.T) {
@@ -23,6 +24,7 @@ func TestCreateDiskDatabase(t *testing.T) {
 		t.Errorf("Error creating database: %s", err)
 	}
 	// TODO make some assertions about the database
+	database.DestroyIfExists()
 }
 
 func TestCreateGetUser(t *testing.T) {
