@@ -55,3 +55,24 @@ func hashPassword(password string, salt string) string {
 func verifyPassword(password string, salt string, hash string) bool {
 	return hashPassword(salt, password) == hash
 }
+
+func (svc *AuthService) VerifyToken(token string, username string) bool {
+	user, err := svc.db.GetUserByUsername(username)
+	if err != nil {
+		return false
+	}
+	if user == nil {
+		return false
+	}
+	if user.Token != token {
+		return false
+	}
+	// TODO check against timestamp from database
+	return true
+}
+
+func (svc *AuthService) NewTokenForUser(username string) string {
+	new_token := util.RandomString(10)
+	svc.db.SetTokenForUser(username, new_token, util.GetCurrentTime())
+	return new_token
+}

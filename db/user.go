@@ -76,3 +76,18 @@ func (db *Database) UpdateUserEmail(username string, email string) error {
 	}
 	return nil
 }
+
+func (db *Database) SetTokenForUser(username string, token string, timestamp string) error {
+	db.Connect()
+	defer db.Disconnect()
+	updateString := "UPDATE users SET token = ?, token_timestamp = ? WHERE username = ?"
+	statement, err := db.db.Prepare(updateString)
+	if err != nil {
+		return err
+	}
+	_, err = statement.Exec(token, timestamp, username)
+	if err != nil {
+		return err
+	}
+	return nil
+}
