@@ -20,7 +20,7 @@ func (svc *AuthService) RegisterUser(username string, password string, email str
 		return nil, errors.New("username already taken")
 	}
 	salt := util.RandomString(10)
-	hash := hashPassword(password, salt)
+	hash := HashPassword(password, salt)
 	user = &model.User{
 		Username:     username,
 		Email:        email,
@@ -42,18 +42,18 @@ func (svc *AuthService) LoginUser(username string, password string) (*model.User
 	if user == nil {
 		return nil, errors.New("user not found")
 	}
-	if !verifyPassword(password, user.PasswordSalt, user.PasswordHash) {
+	if !VerifyPassword(password, user.PasswordSalt, user.PasswordHash) {
 		return nil, errors.New("invalid password")
 	}
 	return user, nil // TODO add some sort of session token
 }
 
-func hashPassword(password string, salt string) string {
+func HashPassword(password string, salt string) string {
 	return util.HashString(salt + password)
 }
 
-func verifyPassword(password string, salt string, hash string) bool {
-	return hashPassword(salt, password) == hash
+func VerifyPassword(password string, salt string, hash string) bool {
+	return HashPassword(salt, password) == hash
 }
 
 func (svc *AuthService) VerifyToken(token string, username string) bool {
