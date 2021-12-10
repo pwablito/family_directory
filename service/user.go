@@ -7,15 +7,17 @@ import (
 )
 
 type UserService struct {
-	db db.Database
+	DB *db.Database
 }
 
-func CreateUserService() *UserService {
-	return &UserService{}
+func CreateUserService(database *db.Database) *UserService {
+	return &UserService{
+		DB: database,
+	}
 }
 
 func (svc *UserService) EditUser(user *model.User) error {
-	fetched_user, err := svc.db.GetUserByUsername(user.Username)
+	fetched_user, err := svc.DB.GetUserByUsername(user.Username)
 	if err != nil {
 		return err
 	}
@@ -23,10 +25,10 @@ func (svc *UserService) EditUser(user *model.User) error {
 		return errors.New("user doesn't exist")
 	}
 	if fetched_user.Name != user.Name {
-		svc.db.UpdateUserName(user.Name, user.Name)
+		svc.DB.UpdateUserName(user.Name, user.Name)
 	}
 	if fetched_user.Email != user.Email {
-		svc.db.UpdateUserEmail(user.Email, user.Name)
+		svc.DB.UpdateUserEmail(user.Email, user.Name)
 	}
 	return nil
 }

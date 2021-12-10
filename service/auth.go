@@ -8,13 +8,19 @@ import (
 )
 
 type AuthService struct {
-	db db.Database
+	DB *db.Database
+}
+
+func CreateAuthService(db *db.Database) *AuthService {
+	return &AuthService{DB: db}
 }
 
 func (svc *AuthService) RegisterUser(username string, password string, email string) (*model.User, error) {
-	user, err := svc.db.GetUserByUsername(username)
+	user, err := svc.DB.GetUserByUsername(username)
 	if err != nil {
-		return nil, err
+		if err.Error() != "sql: no rows in result set" {
+			return nil, err
+		}
 	}
 	if user != nil {
 		return nil, errors.New("username already taken")
@@ -27,7 +33,7 @@ func (svc *AuthService) RegisterUser(username string, password string, email str
 		PasswordHash: hash,
 		PasswordSalt: salt,
 	}
-	err = svc.db.AddUser(*user)
+	err = svc.DB.AddUser(*user)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +41,7 @@ func (svc *AuthService) RegisterUser(username string, password string, email str
 }
 
 func (svc *AuthService) LoginUser(username string, password string) (*model.User, error) {
-	user, err := svc.db.GetUserByUsername(username)
+	user, err := svc.DB.GetUserByUsername(username)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +63,7 @@ func VerifyPassword(password string, salt string, hash string) bool {
 }
 
 func (svc *AuthService) VerifyToken(token string, username string) bool {
-	user, err := svc.db.GetUserByUsername(username)
+	user, err := svc.DB.GetUserByUsername(username)
 	if err != nil {
 		return false
 	}
@@ -73,6 +79,6 @@ func (svc *AuthService) VerifyToken(token string, username string) bool {
 
 func (svc *AuthService) NewTokenForUser(username string) string {
 	new_token := util.RandomString(10)
-	svc.db.SetTokenForUser(username, new_token, util.GetCurrentTime())
+	svc.DB.SetTokenForUser(username, new_token, util.GetCurrentTime())
 	return new_token
 }

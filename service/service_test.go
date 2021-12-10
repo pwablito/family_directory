@@ -1,8 +1,30 @@
 package service
 
-import "testing"
+import (
+	"family_directory/db"
+	"testing"
+)
 
-func TestCreateServices(t *testing.T) {
-	CreatePersonService()
-	CreateUserService()
+func TestAuthServiceRegister(t *testing.T) {
+	database := db.GetDiskDatabase("test.db")
+	database.Create()
+	defer database.DestroyIfExists()
+
+	auth_svc := CreateAuthService(&database)
+
+	usr, err := auth_svc.RegisterUser("test", "test", "test")
+	if err != nil {
+		t.Error("Error registering user")
+	}
+	if usr.Username != "test" {
+		t.Error("Username not set correctly")
+	}
+	if usr.Email != "test" {
+		t.Error("Email not set correctly")
+	}
+
+	_, err = auth_svc.RegisterUser("test", "test", "test")
+	if err == nil {
+		t.Error("User should not be able to register twice")
+	}
 }
