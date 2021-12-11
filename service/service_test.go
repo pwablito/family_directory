@@ -28,3 +28,32 @@ func TestAuthServiceRegister(t *testing.T) {
 		t.Error("User should not be able to register twice")
 	}
 }
+
+func TestAuthServiceLogin(t *testing.T) {
+	database := db.GetDiskDatabase("test.db")
+	database.Create()
+	defer database.DestroyIfExists()
+
+	auth_svc := CreateAuthService(&database)
+
+	_, err := auth_svc.RegisterUser("test", "test", "test")
+	if err != nil {
+		t.Error("Error registering user")
+	}
+
+	usr, err := auth_svc.LoginUser("test", "test")
+	if err != nil {
+		t.Error("Failed logging in after registration")
+	}
+	if usr == nil {
+		t.Error("Returned user should be non-nil")
+	}
+	usr, err = auth_svc.LoginUser("test", "incorrect_password")
+	if err == nil {
+		t.Error("Should have failed on incorrect password")
+	}
+	if usr != nil {
+		t.Error("Returned user should be nil")
+	}
+
+}

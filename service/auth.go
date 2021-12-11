@@ -59,7 +59,7 @@ func HashPassword(password string, salt string) string {
 }
 
 func VerifyPassword(password string, salt string, hash string) bool {
-	return HashPassword(salt, password) == hash
+	return HashPassword(password, salt) == hash
 }
 
 func (svc *AuthService) VerifyToken(token string, username string) bool {
