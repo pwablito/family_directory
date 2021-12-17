@@ -46,10 +46,10 @@ func TestCreateGetUser(t *testing.T) {
 	}
 	user, err := database.GetUserByUsername("test")
 	if err != nil {
-		t.Errorf("Error getting user: %s", err)
+		t.Fatalf("Error getting user: %s", err)
 	}
 	if user == nil {
-		t.Errorf("User not found")
+		t.Fatalf("User not found")
 	}
 	if user.Name != "test" {
 		t.Errorf("User name is not correct: %s", user.Name)
