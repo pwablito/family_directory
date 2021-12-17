@@ -10,7 +10,7 @@ type Partnership struct {
 	Person2 int
 	Start   time.Time
 	End     time.Time
-	title   string
+	Title   string
 }
 
 type Child struct {
