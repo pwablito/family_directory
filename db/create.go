@@ -99,7 +99,9 @@ func (db *Database) CreateUserTable() error {
 			"name" TEXT,
 			"email" TEXT,
 			"password_hash" TEXT,
-			"password_salt" TEXT
+			"password_salt" TEXT,
+			"token" TEXT,
+			"token_created" TEXT
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
