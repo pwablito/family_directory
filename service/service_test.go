@@ -57,3 +57,35 @@ func TestAuthServiceLogin(t *testing.T) {
 	}
 
 }
+
+func TestAuthServiceValidateToken(t *testing.T) {
+	database := db.GetDiskDatabase("test.db")
+	database.Create()
+	defer database.DestroyIfExists()
+
+	auth_svc := CreateAuthService(&database)
+
+	_, err := auth_svc.RegisterUser("test", "test", "test")
+
+	if err != nil {
+		t.Error("Error registering user to test token validation")
+	}
+
+	usr, err := auth_svc.LoginUser("test", "test")
+
+	if err != nil {
+		t.Error("Failed logging in after registration to test token validation")
+	}
+
+	if usr.Token == "" {
+		t.Error("Token should be set after login")
+	}
+
+	if !auth_svc.ValidateToken(usr.Token, "test") {
+		t.Error("Valid token verification should return true")
+	}
+
+	if auth_svc.ValidateToken("incorrect_token", "test") {
+		t.Error("Invalid token verification should return false")
+	}
+}

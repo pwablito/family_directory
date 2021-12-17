@@ -37,6 +37,9 @@ func (svc *AuthService) RegisterUser(username string, password string, email str
 	if err != nil {
 		return nil, err
 	}
+	token := util.RandomString(10)
+	svc.DB.SetToken(username, token, util.GetCurrentTime())
+	user.Token = token
 	return user, nil
 }
 
@@ -51,7 +54,10 @@ func (svc *AuthService) LoginUser(username string, password string) (*model.User
 	if !VerifyPassword(password, user.PasswordSalt, user.PasswordHash) {
 		return nil, errors.New("invalid password")
 	}
-	return user, nil // TODO add some sort of session token
+	token := util.RandomString(10)
+	svc.DB.SetToken(username, token, util.GetCurrentTime())
+	user.Token = token
+	return user, nil
 }
 
 func HashPassword(password string, salt string) string {
@@ -62,7 +68,7 @@ func VerifyPassword(password string, salt string, hash string) bool {
 	return HashPassword(password, salt) == hash
 }
 
-func (svc *AuthService) VerifyToken(token string, username string) bool {
+func (svc *AuthService) ValidateToken(token string, username string) bool {
 	user, err := svc.DB.GetUserByUsername(username)
 	if err != nil {
 		return false
@@ -79,6 +85,6 @@ func (svc *AuthService) VerifyToken(token string, username string) bool {
 
 func (svc *AuthService) NewTokenForUser(username string) string {
 	new_token := util.RandomString(10)
-	svc.DB.SetTokenForUser(username, new_token, util.GetCurrentTime())
+	svc.DB.SetToken(username, new_token, util.GetCurrentTime())
 	return new_token
 }

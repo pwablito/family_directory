@@ -6,13 +6,13 @@ import (
 )
 
 type User struct {
-	Username      string
-	Name          string
-	Email         string
-	PasswordHash  string
-	PasswordSalt  string
-	Token         string
-	TokenLastSeen string
+	Username     string
+	Name         string
+	Email        string
+	PasswordHash string
+	PasswordSalt string
+	Token        string
+	TokenCreated string
 }
 
 func (user *User) Serialize() string {
