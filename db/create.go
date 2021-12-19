@@ -1,7 +1,11 @@
 package db
 
 func (db *Database) Create() error {
-	err := db.CreatePersonTable()
+	err := db.CreateUserTable()
+	if err != nil {
+		return err
+	}
+	err = db.CreatePersonTable()
 	if err != nil {
 		return err
 	}
@@ -10,10 +14,6 @@ func (db *Database) Create() error {
 		return err
 	}
 	err = db.CreatePartnershipTable()
-	if err != nil {
-		return err
-	}
-	err = db.CreateUserTable()
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,8 @@ func (db *Database) CreatePersonTable() error {
 			"birthdate" TEXT,
 			"email" TEXT,
 			"phone" TEXT,
-			FROEIGN KEY("owner_username") REFERENCES user(username)
+			"owner" TEXT NOT NULL,
+			FOREIGN KEY("owner") REFERENCES user(username)
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
@@ -57,9 +58,10 @@ func (db *Database) CreateChildTable() error {
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 			"child_id" INTEGER NOT NULL,
 			"parent_id" INTEGER NOT NULL,
+			"owner" TEXT NOT NULL,
 			FOREIGN KEY("child_id") REFERENCES person(id),
 			FOREIGN KEY("parent_id") REFERENCES person(id),
-			FROEIGN KEY("owner_username") REFERENCES user(username)
+			FOREIGN KEY("owner") REFERENCES user(username)
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
@@ -78,11 +80,12 @@ func (db *Database) CreatePartnershipTable() error {
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 			"person1_id" INTEGER NOT NULL,
 			"person2_id" INTEGER NOT NULL,
+			"owner" TEXT NOT NULL,
 			"start" TEXT,
 			"finish" TEXT,
 			FOREIGN KEY("person1_id") REFERENCES person(id),
 			FOREIGN KEY("person2_id") REFERENCES person(id),
-			FROEIGN KEY("owner_username") REFERENCES user(username)
+			FOREIGN KEY("owner") REFERENCES user(username)
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
