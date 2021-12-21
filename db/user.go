@@ -39,6 +39,41 @@ func (db *Database) GetUserByUsername(username string) (*model.User, error) {
 	}, nil
 }
 
+func (db *Database) GetUserByToken(token string) (*model.User, error) {
+	db.Connect()
+	defer db.Disconnect()
+	queryString := "SELECT username, name, email, password_hash, password_salt, token, token_created FROM user WHERE token = $1 LIMIT 1"
+
+	row := db.db.QueryRow(queryString, token)
+
+	var result_username string
+	var result_name string
+	var result_email string
+	var result_password_hash string
+	var result_password_salt string
+	var result_token string
+	var result_token_created string
+
+	err := row.Scan(
+		&result_username, &result_name, &result_email, &result_password_hash,
+		&result_password_salt, &result_token, &result_token_created,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.User{
+		Username:     result_username,
+		Name:         result_name,
+		Email:        result_email,
+		PasswordHash: result_password_hash,
+		PasswordSalt: result_password_salt,
+		Token:        result_token,
+		TokenCreated: result_token_created,
+	}, nil
+}
+
 func (db *Database) AddUser(user model.User) error {
 	db.Connect()
 	defer db.Disconnect()

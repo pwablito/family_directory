@@ -4,16 +4,16 @@ import (
 	"family_directory/model"
 )
 
-func (db *Database) AddPerson(person model.Person) error {
+func (db *Database) AddPerson(person model.Person, owner string) error {
 	insertStatement := `
-		INSERT INTO person(name, birthdate, email, phone)
-		VALUES (?, ?, ?, ?)
+		INSERT INTO person(name, birthdate, email, phone, owner)
+		VALUES (?, ?, ?, ?, ?)
 	`
 	statement, err := db.db.Prepare(insertStatement)
 	if err != nil {
 		return err
 	}
-	_, err = statement.Exec(person.Name, person.Birthdate, person.Email, person.Phone)
+	_, err = statement.Exec(person.Name, person.Birthdate, person.Email, person.Phone, owner)
 	if err != nil {
 		return err
 	}
