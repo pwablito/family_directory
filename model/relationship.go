@@ -5,16 +5,18 @@ import (
 )
 
 type Partnership struct {
-	Id      int
-	Person1 int
-	Person2 int
-	Start   time.Time
-	End     time.Time
-	Title   string
+	Id            int
+	Person1       int
+	Person2       int
+	Start         time.Time
+	End           time.Time
+	Title         string
+	OwnerUsername string
 }
 
 type Child struct {
-	Id       int
-	ChildId  int
-	ParentId int
+	Id            int
+	ChildId       int
+	ParentId      int
+	OwnerUsername string
 }

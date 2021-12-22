@@ -14,12 +14,34 @@ func CreatePersonService() *PersonService {
 	return &PersonService{}
 }
 
-func (svc *PersonService) GetPersonById(id int) (*model.Person, error) {
-	person, err := svc.db.GetPersonById(id)
+func (svc *PersonService) GetAllPeople(token string) error {
+	return errors.New("not implemented")
+}
+
+func (svc *PersonService) GetPersonById(id int, token string) (*model.Person, error) {
+	owner, err := svc.db.GetUserByToken(token)
 	if err != nil {
 		return nil, err
 	}
-	return person, nil
+	if owner == nil {
+		return nil, errors.New("couldn't find person for provided token")
+	}
+	auth_svc := CreateAuthService(&svc.db)
+	if auth_svc.ValidateToken(token, owner.Username) {
+		person, err := svc.db.GetPersonById(id)
+		if err != nil {
+			return nil, err
+		}
+		if person == nil {
+			return nil, errors.New("couldn't find person for provided id")
+		}
+		if person.OwnerUsername != owner.Username {
+			return nil, errors.New("unauthorized access")
+		}
+		return person, nil
+	}
+
+	return nil, errors.New("invalid token")
 }
 
 func (svc *PersonService) AddPerson(person model.Person, token string) error {
