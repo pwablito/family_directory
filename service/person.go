@@ -14,8 +14,23 @@ func CreatePersonService() *PersonService {
 	return &PersonService{}
 }
 
-func (svc *PersonService) GetAllPeople(token string) error {
-	return errors.New("not implemented")
+func (svc *PersonService) GetAllPeople(token string) ([]model.Person, error) {
+	owner, err := svc.db.GetUserByToken(token)
+	if err != nil {
+		return nil, err
+	}
+	if owner == nil {
+		return nil, errors.New("invalid token")
+	}
+	auth_svc := CreateAuthService(&svc.db)
+	if auth_svc.ValidateToken(token, owner.Username) {
+		persons, err := svc.db.GetAllPersonsByOwner(owner.Username)
+		if err != nil {
+			return nil, err
+		}
+		return persons, nil
+	}
+	return nil, errors.New("not implemented")
 }
 
 func (svc *PersonService) GetPersonById(id int, token string) (*model.Person, error) {

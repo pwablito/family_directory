@@ -21,6 +21,40 @@ func (db *Database) AddPerson(person model.Person, owner string) error {
 	return nil
 }
 
+func (db *Database) GetAllPersonsByOwner(owner string) ([]model.Person, error) {
+	queryStatement := `
+		SELECT * FROM person WHERE owner_username=?
+	`
+	statement, err := db.db.Prepare(queryStatement)
+	if err != nil {
+		return nil, err
+	}
+
+	row, err := statement.Query(owner)
+	if err != nil {
+		return nil, err
+	}
+
+	persons := make([]model.Person, 0)
+	var result_id int
+	var name string
+	var birthdate string
+	var email string
+	var phone string
+	for row.Next() {
+		row.Scan(&result_id, &name, &birthdate, &email, &phone)
+		persons = append(persons, model.Person{
+			Id:            result_id,
+			Name:          name,
+			Birthdate:     birthdate,
+			Email:         email,
+			Phone:         phone,
+			OwnerUsername: owner,
+		})
+	}
+	return persons, nil
+}
+
 func (db *Database) GetPersonById(id int) (*model.Person, error) {
 	queryStatement := `
 		SELECT * FROM person WHERE id=?
@@ -30,7 +64,7 @@ func (db *Database) GetPersonById(id int) (*model.Person, error) {
 		return nil, err
 	}
 
-	row, err := statement.Query()
+	row, err := statement.Query(id)
 	if err != nil {
 		return nil, err
 	}
