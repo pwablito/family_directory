@@ -27,7 +27,7 @@ func TestCreateDiskDatabase(t *testing.T) {
 	database.DestroyIfExists()
 }
 
-func TestCreateGetUser(t *testing.T) {
+func TestUserCRUD(t *testing.T) {
 	database := GetDiskDatabase("test.db")
 	database.DestroyIfExists()
 	err := database.Create()
@@ -66,4 +66,15 @@ func TestCreateGetUser(t *testing.T) {
 	if user.Username != "test" {
 		t.Errorf("User username is not correct: %s", user.Username)
 	}
+}
+
+func TestPersonCRUD(t *testing.T) {
+	t.Fatal("not implemented")
+}
+
+func TestPartnershipCRUD(t *testing.T) {
+	t.Fatal("not implemented")
+}
+func TestChildCRUD(t *testing.T) {
+	t.Fatal("not implemented")
 }

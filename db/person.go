@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"family_directory/model"
 )
 
@@ -48,4 +49,23 @@ func (db *Database) GetPersonById(id int) (*model.Person, error) {
 		Email:     email,
 		Phone:     phone,
 	}, nil
+}
+
+func (db *Database) RemovePerson(id int) error {
+	deleteStatement := `
+		DELETE FROM user WHERE id=?
+	`
+	statement, err := db.db.Prepare(deleteStatement)
+	if err != nil {
+		return err
+	}
+	_, err = statement.Exec(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *Database) UpdatePerson(person model.Person) error {
+	return errors.New("not implemented")
 }
