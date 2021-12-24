@@ -74,14 +74,17 @@ func (db *Database) GetPersonById(id int) (*model.Person, error) {
 	var birthdate string
 	var email string
 	var phone string
-	row.Scan(&result_id, &name, &birthdate, &email, &phone)
+	var owner string
+
+	row.Scan(&result_id, &name, &birthdate, &email, &phone, &owner)
 
 	return &model.Person{
-		Id:        result_id,
-		Name:      name,
-		Birthdate: birthdate,
-		Email:     email,
-		Phone:     phone,
+		Id:            result_id,
+		Name:          name,
+		Birthdate:     birthdate,
+		Email:         email,
+		Phone:         phone,
+		OwnerUsername: owner,
 	}, nil
 }
 
