@@ -6,5 +6,6 @@ type Person struct {
 	Birthdate     string // TODO Change to time.Time
 	Email         string
 	Phone         string
+	Notes         string
 	OwnerUsername string
 }

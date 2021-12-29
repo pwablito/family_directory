@@ -7,14 +7,14 @@ import (
 
 func (db *Database) AddPerson(person model.Person, owner string) error {
 	insertStatement := `
-		INSERT INTO person(name, birthdate, email, phone, owner)
-		VALUES (?, ?, ?, ?, ?)
+		INSERT INTO person(name, birthdate, email, phone, owner, notes)
+		VALUES (?, ?, ?, ?, ?, ?)
 	`
 	statement, err := db.db.Prepare(insertStatement)
 	if err != nil {
 		return err
 	}
-	_, err = statement.Exec(person.Name, person.Birthdate, person.Email, person.Phone, owner)
+	_, err = statement.Exec(person.Name, person.Birthdate, person.Email, person.Phone, owner, person.Notes)
 	if err != nil {
 		return err
 	}
@@ -41,8 +41,9 @@ func (db *Database) GetAllPersonsByOwner(owner string) ([]model.Person, error) {
 	var birthdate string
 	var email string
 	var phone string
+	var notes string
 	for row.Next() {
-		row.Scan(&result_id, &name, &birthdate, &email, &phone)
+		row.Scan(&result_id, &name, &birthdate, &email, &phone, &notes)
 		persons = append(persons, model.Person{
 			Id:            result_id,
 			Name:          name,
@@ -50,6 +51,7 @@ func (db *Database) GetAllPersonsByOwner(owner string) ([]model.Person, error) {
 			Email:         email,
 			Phone:         phone,
 			OwnerUsername: owner,
+			Notes:         notes,
 		})
 	}
 	return persons, nil
@@ -75,8 +77,9 @@ func (db *Database) GetPersonById(id int) (*model.Person, error) {
 	var email string
 	var phone string
 	var owner string
+	var notes string
 
-	row.Scan(&result_id, &name, &birthdate, &email, &phone, &owner)
+	row.Scan(&result_id, &name, &birthdate, &email, &phone, &owner, &notes)
 
 	return &model.Person{
 		Id:            result_id,
@@ -85,6 +88,7 @@ func (db *Database) GetPersonById(id int) (*model.Person, error) {
 		Email:         email,
 		Phone:         phone,
 		OwnerUsername: owner,
+		Notes:         notes,
 	}, nil
 }
 

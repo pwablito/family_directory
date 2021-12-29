@@ -39,6 +39,7 @@ func (db *Database) CreatePersonTable() error {
 			"email" TEXT,
 			"phone" TEXT,
 			"owner" TEXT NOT NULL,
+			"notes" TEXT,
 			FOREIGN KEY("owner") REFERENCES user(username)
 		);
 	`
@@ -59,6 +60,7 @@ func (db *Database) CreateChildTable() error {
 			"child_id" INTEGER NOT NULL,
 			"parent_id" INTEGER NOT NULL,
 			"owner" TEXT NOT NULL,
+			"notes" TEXT,
 			FOREIGN KEY("child_id") REFERENCES person(id),
 			FOREIGN KEY("parent_id") REFERENCES person(id),
 			FOREIGN KEY("owner") REFERENCES user(username)
@@ -83,6 +85,7 @@ func (db *Database) CreatePartnershipTable() error {
 			"owner" TEXT NOT NULL,
 			"start" TEXT,
 			"finish" TEXT,
+			"notes" TEXT,
 			FOREIGN KEY("person1_id") REFERENCES person(id),
 			FOREIGN KEY("person2_id") REFERENCES person(id),
 			FOREIGN KEY("owner") REFERENCES user(username)
@@ -107,7 +110,8 @@ func (db *Database) CreateUserTable() error {
 			"password_hash" TEXT,
 			"password_salt" TEXT,
 			"token" TEXT,
-			"token_created" TEXT
+			"token_created" TEXT,
+			"notes" TEXT
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
