@@ -5,7 +5,7 @@ import (
 	"family_directory/model"
 )
 
-func (db *Database) AddPerson(person model.Person, owner string) error {
+func (db *Database) AddPerson(person model.Person) error {
 	insertStatement := `
 		INSERT INTO person(name, birthdate, email, phone, owner, notes)
 		VALUES (?, ?, ?, ?, ?, ?)
@@ -14,7 +14,7 @@ func (db *Database) AddPerson(person model.Person, owner string) error {
 	if err != nil {
 		return err
 	}
-	_, err = statement.Exec(person.Name, person.Birthdate, person.Email, person.Phone, owner, person.Notes)
+	_, err = statement.Exec(person.Name, person.Birthdate, person.Email, person.Phone, person.OwnerUsername, person.Notes)
 	if err != nil {
 		return err
 	}

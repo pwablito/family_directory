@@ -69,7 +69,8 @@ func (svc *PersonService) AddPerson(person model.Person, token string) error {
 	}
 	auth_svc := CreateAuthService(&svc.db)
 	if auth_svc.ValidateToken(token, owner.Username) {
-		svc.db.AddPerson(person, owner.Username)
+		person.OwnerUsername = owner.Username
+		svc.db.AddPerson(person)
 	}
 	return errors.New("invalid token")
 }
