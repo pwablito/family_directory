@@ -80,14 +80,13 @@ func (db *Database) CreatePartnershipTable() error {
 	createSQL := `
 		CREATE TABLE partnership (
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-			"person1_id" INTEGER NOT NULL,
-			"person2_id" INTEGER NOT NULL,
+			"partnership_id" INTEGER NOT NULL,
+			"person_id" INTEGER NOT NULL,
 			"owner" TEXT NOT NULL,
 			"start" TEXT,
 			"finish" TEXT,
 			"notes" TEXT,
-			FOREIGN KEY("person1_id") REFERENCES person(id),
-			FOREIGN KEY("person2_id") REFERENCES person(id),
+			FOREIGN KEY("person_id") REFERENCES person(id),
 			FOREIGN KEY("owner") REFERENCES user(username)
 		);
 	`

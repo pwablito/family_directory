@@ -6,8 +6,7 @@ import (
 
 type Partnership struct {
 	Id            int
-	Person1       int
-	Person2       int
+	PartnerIds    []int
 	Start         time.Time
 	End           time.Time
 	Title         string
