@@ -40,7 +40,7 @@ func (db *Database) CreatePersonTable() error {
 			"phone" TEXT,
 			"owner" TEXT NOT NULL,
 			"notes" TEXT,
-			FOREIGN KEY("owner") REFERENCES user(username)
+			FOREIGN KEY("owner") REFERENCES user("username")
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
@@ -61,9 +61,9 @@ func (db *Database) CreateChildTable() error {
 			"parent_id" INTEGER NOT NULL,
 			"owner" TEXT NOT NULL,
 			"notes" TEXT,
-			FOREIGN KEY("child_id") REFERENCES person(id),
-			FOREIGN KEY("parent_id") REFERENCES person(id),
-			FOREIGN KEY("owner") REFERENCES user(username)
+			FOREIGN KEY("child_id") REFERENCES person("id"),
+			FOREIGN KEY("parent_id") REFERENCES person("id"),
+			FOREIGN KEY("owner") REFERENCES user("username")
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
@@ -86,8 +86,8 @@ func (db *Database) CreatePartnershipTable() error {
 			"start" TEXT,
 			"finish" TEXT,
 			"notes" TEXT,
-			FOREIGN KEY("person_id") REFERENCES person(id),
-			FOREIGN KEY("owner") REFERENCES user(username)
+			FOREIGN KEY("person_id") REFERENCES person("id"),
+			FOREIGN KEY("owner") REFERENCES user("username")
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
