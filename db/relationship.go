@@ -1,6 +1,9 @@
 package db
 
-import "family_directory/model"
+import (
+	"errors"
+	"family_directory/model"
+)
 
 func (db *Database) AddChildRelationship(child model.Child, owner string) error {
 	insertStatement := `
@@ -19,19 +22,7 @@ func (db *Database) AddChildRelationship(child model.Child, owner string) error 
 }
 
 func (db *Database) AddPartnershipRelationship(partnership model.Partnership, owner string) error {
-	insertStatement := `
-		INSERT INTO partnership(id, partner1_id, partner2_id, notes, owner_username)
-		VALUES (?, ?, ?, ?, ?)
-	`
-	statement, err := db.db.Prepare(insertStatement)
-	if err != nil {
-		return err
-	}
-	_, err = statement.Exec(partnership.Id, partnership.Person1, partnership.Person2, partnership.Notes, partnership.OwnerUsername)
-	if err != nil {
-		return err
-	}
-	return nil
+	return errors.New("not implemented")
 }
 
 func (db *Database) RemoveChildRelationship(id int) error {
@@ -50,16 +41,9 @@ func (db *Database) RemoveChildRelationship(id int) error {
 }
 
 func (db *Database) RemovePartnershipRelationship(id int) error {
-	deleteStatement := `
-		DELETE FROM partnership WHERE id=?
-	`
-	statement, err := db.db.Prepare(deleteStatement)
-	if err != nil {
-		return err
-	}
-	_, err = statement.Exec(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return errors.New("not implemented")
+}
+
+func (db *Database) RemovePartnerFromRelationship(relationship_id int, person_id int) error {
+	return errors.New("not implemented")
 }
