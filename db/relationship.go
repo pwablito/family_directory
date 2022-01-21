@@ -44,6 +44,17 @@ func (db *Database) RemovePartnershipRelationship(id int) error {
 	return errors.New("not implemented")
 }
 
-func (db *Database) RemovePartnerFromRelationship(relationship_id int, person_id int) error {
-	return errors.New("not implemented")
+func (db *Database) RemovePartnerFromRelationship(partnership_id int, person_id int) error {
+	deleteStatement := `
+		DELETE FROM partnership_member WHERE person_id=? and partnership_id=?
+	`
+	statement, err := db.db.Prepare(deleteStatement)
+	if err != nil {
+		return err
+	}
+	_, err = statement.Exec(person_id, partnership_id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

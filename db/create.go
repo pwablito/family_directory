@@ -13,7 +13,7 @@ func (db *Database) Create() error {
 	if err != nil {
 		return err
 	}
-	err = db.CreatePartnershipTable()
+	err = db.CreatePartnershipTables()
 	if err != nil {
 		return err
 	}
@@ -75,23 +75,36 @@ func (db *Database) CreateChildTable() error {
 	return nil
 }
 
-func (db *Database) CreatePartnershipTable() error {
+func (db *Database) CreatePartnershipTables() error {
 	db.Connect()
+	defer db.Disconnect()
 	createSQL := `
 		CREATE TABLE partnership (
 			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-			"partnership_id" INTEGER NOT NULL,
-			"person_id" INTEGER NOT NULL,
 			"owner" TEXT NOT NULL,
 			"start" TEXT,
 			"finish" TEXT,
 			"notes" TEXT,
-			FOREIGN KEY("person_id") REFERENCES person("id"),
 			FOREIGN KEY("owner") REFERENCES user("username")
 		);
 	`
 	statement, err := db.db.Prepare(createSQL)
-	defer db.Disconnect()
+	if err != nil {
+		return err
+	}
+	statement.Exec()
+	createSQL = `
+		CREATE TABLE partnership_member (
+			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			"partnership_id" INTEGER NOT NULL,
+			"person_id" INTEGER NOT NULL,
+			"start" TEXT,
+			"finish" TEXT,
+			"notes" TEXT,
+			FOREIGN KEY("person_id") REFERENCES person("id")
+		);
+	`
+	statement, err = db.db.Prepare(createSQL)
 	if err != nil {
 		return err
 	}
