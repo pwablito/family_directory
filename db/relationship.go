@@ -46,13 +46,31 @@ func (db *Database) RemovePartnershipRelationship(id int) error {
 
 func (db *Database) RemovePartnerFromRelationship(partnership_id int, person_id int) error {
 	deleteStatement := `
-		DELETE FROM partnership_member WHERE person_id=? and partnership_id=?
+		DELETE FROM partnership_member WHERE person_id=? AND partnership_id=?
 	`
 	statement, err := db.db.Prepare(deleteStatement)
 	if err != nil {
 		return err
 	}
 	_, err = statement.Exec(person_id, partnership_id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+/*
+* Marks a partner's membership in a relationship as ended at a provided timestamp
+ */
+func (db *Database) EndPartnerRelationshipMembership(partnership_id int, person_id int, timestamp string) error {
+	updateStatement := `
+		UPDATE partnership_member SET finish=? WHERE person_id=? AND partnership_id=?
+	`
+	statement, err := db.db.Prepare(updateStatement)
+	if err != nil {
+		return err
+	}
+	_, err = statement.Exec(timestamp, person_id, partnership_id)
 	if err != nil {
 		return err
 	}

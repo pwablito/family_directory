@@ -80,7 +80,7 @@ func (db *Database) CreatePartnershipTables() error {
 	defer db.Disconnect()
 	createSQL := `
 		CREATE TABLE partnership (
-			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			"owner" TEXT NOT NULL,
 			"start" TEXT,
 			"finish" TEXT,
@@ -95,7 +95,7 @@ func (db *Database) CreatePartnershipTables() error {
 	statement.Exec()
 	createSQL = `
 		CREATE TABLE partnership_member (
-			"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+			"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			"partnership_id" INTEGER NOT NULL,
 			"person_id" INTEGER NOT NULL,
 			"start" TEXT,
