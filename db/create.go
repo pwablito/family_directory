@@ -48,8 +48,8 @@ func (db *Database) CreatePersonTable() error {
 	if err != nil {
 		return err
 	}
-	statement.Exec()
-	return nil
+	_, err = statement.Exec()
+	return err
 }
 
 func (db *Database) CreateChildTable() error {
@@ -71,8 +71,8 @@ func (db *Database) CreateChildTable() error {
 	if err != nil {
 		return err
 	}
-	statement.Exec()
-	return nil
+	_, err = statement.Exec()
+	return err
 }
 
 func (db *Database) CreatePartnershipTables() error {
@@ -108,8 +108,8 @@ func (db *Database) CreatePartnershipTables() error {
 	if err != nil {
 		return err
 	}
-	statement.Exec()
-	return nil
+	_, err = statement.Exec()
+	return err
 }
 
 func (db *Database) CreateUserTable() error {
@@ -131,6 +131,6 @@ func (db *Database) CreateUserTable() error {
 	if err != nil {
 		return err
 	}
-	statement.Exec()
-	return nil
+	_, err = statement.Exec()
+	return err
 }
